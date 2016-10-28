@@ -101,7 +101,7 @@ int photon_map_remove(photon_map_t* map, PHOTON_KEY_TYPE key)
       PHOTON_HASH_TYPE hash = PHOTON_HASH_FUNCTION(key); 
       hash %= map->key_map_size;
 
-      map->key2first_map[hash] = NULL;
+      map->key2first_map[hash] = cell->next;
     } 
     if (cell->next)     cell->next->previous = cell->previous;
     
