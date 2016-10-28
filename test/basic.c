@@ -14,10 +14,12 @@ int main(void) {
   printf("initializing photon map\n");
   photon_map_init(map, 16, 32); 
 
+  long excluded_key = rand();
+
   long keys[RECORD_NUM]; // = {17, 42, 1337};
   long values[RECORD_NUM]; // = {171, 421, 13371};
   for (int i = 0; i < RECORD_NUM; ++i) {
-    keys[i] = rand();
+    while ((keys[i] = rand()) == excluded_key) {};
     values[i] = rand();
   }
 
@@ -29,8 +31,21 @@ int main(void) {
   for (int i = RECORD_NUM - 1; i >= 0; i--) {
     long value = (long) photon_map_get(map, keys[i]);
     printf("record<%ld, %ld> -> %ld\n", keys[i], values[i], value);
-    assert(value == values[i] && "wrong value retrieved in map");
+    if (value != values[i]) return -1;
   };
+
+  printf("testing contain functionnality\n");
+  for (int i = RECORD_NUM - 1; i >= 0; i--) {
+    int contain = photon_map_contains(map, keys[i]);
+    printf("map contains keys[%d]: %d\n", i, contain);
+    if (!contain) return -1;
+  }
+
+  int contain_excluded = photon_map_contains(map, excluded_key);
+  printf("map contains excluded_key=%d\n", contain_excluded);
+  if (contain_excluded) return -1;
+
+
 
   return 0;
 }
