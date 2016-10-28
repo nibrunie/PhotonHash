@@ -109,8 +109,29 @@ int photon_map_remove(photon_map_t* map, PHOTON_KEY_TYPE key)
     cell->next = map->first_empty_cell;
     cell->previous = NULL;
     map->first_empty_cell = cell;
+  } else {
+    return 0;
   }
 
   return 1;
 }
 
+void photon_map_dump(photon_map_t* map)
+{
+  for (int kid = 0; kid < map->key_map_size; ++kid) 
+  {
+    printf("KEY_HASH=%d | ", kid);
+    photon_cell_t* cell = map->key2first_map[kid];
+    while (cell) {
+      printf(" -> <@%p, %d, %p>", cell, cell->key, cell->value);
+      cell = cell->next;
+    }
+    printf("\n");
+    cell = map->key2first_map[kid];
+    while (cell) {
+      printf(" -> <@%p, @%p, @%p>", cell->previous, cell, cell->next);
+      cell = cell->next;
+    }
+    printf("\n");
+  }
+}

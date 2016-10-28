@@ -99,3 +99,5 @@ int photon_map_contains(photon_map_t* map, PHOTON_KEY_TYPE key);
  */
 int photon_map_remove(photon_map_t* map, PHOTON_KEY_TYPE key);
 
+void photon_map_dump(photon_map_t* map);
+
