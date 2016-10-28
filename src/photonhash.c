@@ -51,7 +51,9 @@ int photon_map_insert(photon_map_t* map, PHOTON_KEY_TYPE key, PHOTON_VALUE_TYPE 
   {
     list_head->previous = cell;
     cell->next = list_head;
-  } 
+  } else {
+    cell->next = NULL;
+  }
 
   cell->previous = NULL;
   map->key2first_map[hash] = cell;
