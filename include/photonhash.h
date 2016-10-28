@@ -1,5 +1,7 @@
 #pragma ONCE
 
+#include <stdint.h>
+
 #ifndef PHOTON_KEY_TYPE 
 #define PHOTON_KEY_TYPE long
 #endif
@@ -88,12 +90,12 @@ PHOTON_VALUE_TYPE photon_map_get(photon_map_t* map, PHOTON_KEY_TYPE key);
  *  @param key key of the record to be tested
  *  @return zero if the record is not in @p map else non-zero value
  */
-int photon_map_contains(photon_map_t* map, PHOTON_VALUE_TYPE key);
+int photon_map_contains(photon_map_t* map, PHOTON_KEY_TYPE key);
 
 /** Remove the record whose key is @p key in @p map 
  *  @param map address of the Photon Map where to insert the new record
  *  @param key key of the record to be removed
  *  @return zero if the record was not removed from @p map else non-zero value
  */
-int photon_map_remove(photon_map_t* map, PHOTON_VALUE_TYPE key);
+int photon_map_remove(photon_map_t* map, PHOTON_KEY_TYPE key);
 
