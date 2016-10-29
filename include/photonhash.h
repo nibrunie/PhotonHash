@@ -3,10 +3,10 @@
 #include <stdint.h>
 
 #ifndef PHOTON_KEY_TYPE 
-#define PHOTON_KEY_TYPE long
+#define PHOTON_KEY_TYPE uint64_t
 #endif
 #ifndef PHOTON_VALUE_TYPE
-#define PHOTON_VALUE_TYPE void*
+#define PHOTON_VALUE_TYPE uint64_t
 #endif
 #ifndef PHOTON_HASH_TYPE
 #define PHOTON_HASH_TYPE uint32_t
@@ -32,7 +32,7 @@ static uint32_t XXH32_round(uint32_t seed, uint32_t input)
 }
 
 #ifndef PHOTON_HASH_FUNCTION
-#define PHOTON_HASH_FUNCTION(x) XXH32_round(PRIME32_3, x)
+#define PHOTON_HASH_FUNCTION(x) XXH32_round(PRIME32_5, XXH32_round(PRIME32_4, XXH32_round(PRIME32_3, x)))
 #endif
 
 
