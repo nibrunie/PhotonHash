@@ -8,7 +8,7 @@
 #include <timing.h>
 
 #define RECORD_NUM 1000000
-#define KEY_MAP_SIZE 16384
+#define KEY_MAP_SIZE 350000
 
 int main(void) {
   photon_map_t* map = calloc(1, sizeof(photon_map_t));;
