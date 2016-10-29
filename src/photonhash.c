@@ -15,19 +15,16 @@ void photon_map_init(photon_map_t* map, int key_map_size, int cell_num)
   map->first_empty_cell = map->cells;
   if (cell_num > 0) {
     map->first_empty_cell->next     = map->cells + 1;
-    map->cells[0].previous = NULL;
     map->cells[0].key      = 0;
     map->cells[0].value    = 0;
   }
   for (int cid = 1; cid < cell_num - 1; ++cid) {
     map->cells[cid].next     = map->cells + (cid+1);
-    map->cells[cid].previous = map->cells + (cid-1);
     map->cells[cid].key      = 0;
     map->cells[cid].value    = 0;
   }
 
   map->cells[cell_num].next     = NULL;
-  map->cells[cell_num].previous = map->cells + (cell_num - 1);
 
 };
 
@@ -49,13 +46,11 @@ int photon_map_insert(photon_map_t* map, PHOTON_KEY_TYPE key, PHOTON_VALUE_TYPE 
 
   if (list_head) 
   {
-    list_head->previous = cell;
     cell->next = list_head;
   } else {
     cell->next = NULL;
   }
 
-  cell->previous = NULL;
   map->key2first_map[hash] = cell;
 
 
@@ -69,6 +64,20 @@ static photon_cell_t* photon_map_get_cell(photon_map_t* map, PHOTON_KEY_TYPE key
   hash %= map->key_map_size;
 
   for (cell = map->key2first_map[hash]; cell; cell = cell->next)
+  {
+    if (cell->key == key) break;
+  }
+
+  return cell;
+}
+
+static photon_cell_t* photon_map_get_cell_with_previous(photon_cell_t** previous, photon_map_t* map, PHOTON_KEY_TYPE key)
+{
+  photon_cell_t* cell = NULL;
+  PHOTON_HASH_TYPE hash = PHOTON_HASH_FUNCTION(key); 
+  hash %= map->key_map_size;
+
+  for (cell = map->key2first_map[hash]; cell; *previous = cell, cell = cell->next)
   {
     if (cell->key == key) break;
   }
@@ -93,21 +102,20 @@ int photon_map_contains(photon_map_t* map, PHOTON_KEY_TYPE key)
 
 int photon_map_remove(photon_map_t* map, PHOTON_KEY_TYPE key)
 {
-  photon_cell_t* cell = photon_map_get_cell(map, key);
+  photon_cell_t* previous = NULL;
+  photon_cell_t* cell = photon_map_get_cell_with_previous(&previous, map, key);
   if (cell) {
-    if (cell->previous) {
-      cell->previous->next = cell->next;
+    if (previous) {
+      previous->next = cell->next;
     } else {
       PHOTON_HASH_TYPE hash = PHOTON_HASH_FUNCTION(key); 
       hash %= map->key_map_size;
 
       map->key2first_map[hash] = cell->next;
     } 
-    if (cell->next)     cell->next->previous = cell->previous;
     
     // enqueueing in empty cell
     cell->next = map->first_empty_cell;
-    cell->previous = NULL;
     map->first_empty_cell = cell;
   } else {
     return 0;
@@ -129,7 +137,7 @@ void photon_map_dump(photon_map_t* map)
     printf("\n");
     cell = map->key2first_map[kid];
     while (cell) {
-      printf(" -> <@%p, @%p, @%p>", cell->previous, cell, cell->next);
+      printf(" -> <@%p, @%p, @%p>", NULL, cell, cell->next);
       cell = cell->next;
     }
     printf("\n");

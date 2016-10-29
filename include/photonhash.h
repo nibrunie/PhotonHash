@@ -43,7 +43,6 @@ typedef struct photon_cell_s
   PHOTON_KEY_TYPE   key;
   PHOTON_VALUE_TYPE value;
   struct photon_cell_s* next;
-  struct photon_cell_s* previous;
 } 
 photon_cell_t;
 
