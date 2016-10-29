@@ -1,6 +1,6 @@
 
 CFLAGS+= -Iinclude -std=c99 -g 
-LFLAGS+= -L./ -lphotonhash
+LFLAGS+= -L./ -lphotonhash -lm
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $^ -o $@
@@ -8,7 +8,7 @@ LFLAGS+= -L./ -lphotonhash
 libphotonhash.a: src/photonhash.o
 	$(AR) rcs $@ $^
 
-test_list:= basic
+test_list:= basic large_map
 
 define gen_test_rule
 # $(1) test
