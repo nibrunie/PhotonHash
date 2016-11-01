@@ -7,21 +7,25 @@
 #include <photonhash.h>
 #include <timing.h>
 
-#define RECORD_NUM 1000000
-#define KEY_MAP_SIZE 350000
+int main(int argc, char** argv) {
+  if (argc < 3) {
+    printf("Usage %s <record_num> <key_map_size>\n",  argv[0]);
+  }
 
-int main(void) {
   photon_map_t* map = calloc(1, sizeof(photon_map_t));;
-  int key_map_size = KEY_MAP_SIZE;
+  int RECORD_NUM = atoi(argv[1]);
+  int KEY_MAP_SIZE = atoi(argv[2]);
+
   int cell_num = RECORD_NUM;
+  int key_map_size = KEY_MAP_SIZE;
 
   printf("initializing photon map\n");
   photon_map_init(map, key_map_size, cell_num); 
 
   long excluded_key = rand();
 
-  long keys[RECORD_NUM]; 
-  long values[RECORD_NUM]; 
+  long* keys = calloc(RECORD_NUM, sizeof(long)); 
+  long* values = calloc(RECORD_NUM, sizeof(long)); 
   long valid_key = excluded_key + 1;
   for (int i = 0; i < RECORD_NUM; ++i) {
     // increment to ensure unicity

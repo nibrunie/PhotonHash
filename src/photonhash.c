@@ -53,7 +53,6 @@ int photon_map_insert(photon_map_t* map, PHOTON_KEY_TYPE key, PHOTON_VALUE_TYPE 
 
   map->key2first_map[hash] = cell;
 
-
   return 1;
 }
 

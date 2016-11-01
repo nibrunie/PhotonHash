@@ -32,7 +32,7 @@ static uint32_t XXH32_round(uint32_t seed, uint32_t input)
 }
 
 #ifndef PHOTON_HASH_FUNCTION
-#define PHOTON_HASH_FUNCTION(x) XXH32_round(PRIME32_5, XXH32_round(PRIME32_4, XXH32_round(PRIME32_3, x)))
+#define PHOTON_HASH_FUNCTION(x) (x) // XXH32_round(PRIME32_5, XXH32_round(PRIME32_4, XXH32_round(PRIME32_3, x)))
 #endif
 
 
@@ -62,6 +62,7 @@ typedef struct
   photon_cell_t*  first_empty_cell;
 } 
 photon_map_t;
+
 
 /** Initialize a photon map of @p cell_nums value 
  *  @param map point to the Photon Map to initialize
